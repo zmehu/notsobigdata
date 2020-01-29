@@ -1,4 +1,8 @@
+# Some scripts searching string in big file
+You can take big file from https://archive.org/details/stackexchange
+
 ##
+```
 z@wspolnyxl:/mnt/big2/root/tmp/multisearch/ > ls -lh
 total 8.4G
 -rw-rw-r-- 1 z z 8.4G Sep 11  2018 StackOverflow2010.mdf
@@ -7,9 +11,11 @@ total 8.4G
 -rwxrw-r-- 1 z z 1.6K Jan 29 17:51 multisearch_multiprocess_2.py
 -rwxrw-r-- 1 z z  846 Jan 29 14:48 multisearch_single_python2.py
 -rwxrw-r-- 1 z z  842 Jan 29 15:23 multisearch_single_readline.py
+```
 
 
 ##
+```
 z@wspolnyxl:/mnt/big2/root/tmp/multisearch/ > time grep -c OMG StackOverflow2010.mdf
 2
 grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn} -c OMG    49.59s  user 5.08s system 71% cpu 1:16.34 total
@@ -19,9 +25,11 @@ total (sum):               0 KB
 max memory:                5 MB
 page faults from disk:     0
 other page faults:         140
+```
 
 
 ##
+```
 z@wspolnyxl:/mnt/big2/root/tmp/multisearch/ > time ./multisearch_dd.sh OMG StackOverflow2010.mdf 4
 Searching OMG in file StackOverflow2010.mdf
 Size: 8980398080 Sectorsize: 4096 Size_bs: 2192480 Chunk_size: 548120
@@ -30,9 +38,11 @@ Size: 8980398080 Sectorsize: 4096 Size_bs: 2192480 Chunk_size: 548120
 real    0m31.580s
 user    0m12.564s
 sys     0m4.463s
+```
 
 
 ##
+```
 z@wspolnyxl:/mnt/big2/root/tmp/multisearch/ > time ./multisearch_single_python2.py OMG StackOverflow2010.mdf
 Search file StackOverflow2010.mdf for string OMG
 1334938524
@@ -45,9 +55,11 @@ total (sum):               0 KB
 max memory:                7154 MB
 page faults from disk:     86
 other page faults:         159703
+```
 
 
 ##
+```
 z@wspolnyxl:/mnt/big2/root/tmp/multisearch/ > time ./multisearch_single_readline.py OMG StackOverflow2010.mdf
 Search file StackOverflow2010.mdf for string OMG
 Find 1
@@ -60,9 +72,11 @@ total (sum):               0 KB
 max memory:                7 MB
 page faults from disk:     14
 other page faults:         1891
+```
 
 
 ##
+```
 z@wspolnyxl:/mnt/big2/root/tmp/multisearch/ > time ./multisearch_multiprocess.py OMG StackOverflow2010.mdf 4
 Search file StackOverflow2010.mdf for string OMG, use 4 cores, file size: 8980398080
 Find 1
@@ -75,9 +89,11 @@ total (sum):               0 KB
 max memory:                292 MB
 page faults from disk:     47
 other page faults:         3660901
+```
 
 
 ##
+```
 z@wspolnyxl:/mnt/big2/root/tmp/multisearch/ > time ./multisearch_multiprocess_2.py OMG StackOverflow2010.mdf 4
 Search file StackOverflow2010.mdf for string OMG, use 4 cores, file size: 8980398080
 job SKIP 0 CHUNK 2245099520
@@ -98,6 +114,6 @@ total (sum):               0 KB
 max memory:                56 MB
 page faults from disk:     27
 other page faults:         103017
-
+```
 
 
