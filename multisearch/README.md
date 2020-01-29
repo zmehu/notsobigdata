@@ -94,7 +94,7 @@ other page faults:         3660901
 
 ##
 ```
-z@wspolnyxl:/mnt/big2/root/tmp/multisearch/ > time ./multisearch_multiprocess_2.py OMG StackOverflow2010.mdf 4
+z@wspolnyxl:/mnt/big2/root/tmp/notsobigdata/multisearch/ > time ./multisearch_multiprocess_2.py OMG StackOverflow2010.mdf 4
 Search file StackOverflow2010.mdf for string OMG, use 4 cores, file size: 8980398080
 job SKIP 0 CHUNK 2245099520
 job SKIP 2245099521 CHUNK 2245099520
@@ -105,15 +105,15 @@ seek 2245099521 start 2245099521 size 2245099520
 seek 4490199042 start 4490199042 size 2245099520
 seek 6735298563 start 6735298563 size 2245099520
 Find 1
-Find 1
-Search result: 0
-./multisearch_multiprocess_2.py OMG StackOverflow2010.mdf 4   42.17s  user 10.62s system 171% cpu 30.838 total
+Find 2
+Search result: 2
+./multisearch_multiprocess_2.py OMG StackOverflow2010.mdf 4   38.63s  user 10.23s system 126% cpu 38.560 total
 avg shared (code):         0 KB
 avg unshared (data/stack): 0 KB
 total (sum):               0 KB
-max memory:                56 MB
-page faults from disk:     27
-other page faults:         103017
+max memory:                57 MB
+page faults from disk:     4
+other page faults:         192436
 ```
 
 
