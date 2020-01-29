@@ -3,9 +3,9 @@
 import mmap
 import sys
 import os
-from multiprocessing import Pool, Lock
-
-lock = Lock()
+from multiprocessing import Pool, Lock, Value
+import multiprocessing
+import ctypes
 
 def print_usage():
     SCRIPTNAME=os.path.basename(__file__)
@@ -13,8 +13,7 @@ def print_usage():
     sys.exit(1)
 
 # FILENAME,SKIP,CHUNK,SEARCH
-def searchfile(file_name, start, size, search):
-    global RESULT
+def searchfile(file_name, start, size, search, RESULT, lock):
     chunk=10*1024*1024
     readed=0
     with open(file_name) as f:
@@ -25,10 +24,11 @@ def searchfile(file_name, start, size, search):
             readed=readed+chunk
             for line in lines:
                 if search in line:
-                    lock.acquire()
-                    RESULT=RESULT+1
-                    print "Find %d" % (RESULT)
-                    lock.release()
+                    #lock.acquire()
+                    with lock:
+                        RESULT.value += 1
+                        print "Find %d" % (RESULT.value)
+                    #lock.release()
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
@@ -38,12 +38,14 @@ if __name__ == "__main__":
     SEARCH=sys.argv[1]
     CORES=sys.argv[3]
     SIZE_BYTES=os.path.getsize(FILENAME)
-    global RESULT
-    RESULT=0
+    RESULT = Value('i', 0)
     print "Search file %s for string %s, use %s cores, file size: %s" % (FILENAME, SEARCH, CORES, SIZE_BYTES)
 
     pool = Pool(int(CORES))
     jobs = []
+    manager = multiprocessing.Manager()
+    counter = manager.Value(ctypes.c_ulonglong, 0)
+    counter_lock = manager.Lock()  # pylint: disable=no-member
 
     # open file
     #CHUNK=int(100*1024*1024)
@@ -52,7 +54,7 @@ if __name__ == "__main__":
 
     while SKIP <= SIZE_BYTES:
         print("job SKIP %d CHUNK %d" % (SKIP, CHUNK))
-        jobs.append( pool.apply_async(searchfile, (FILENAME,SKIP,CHUNK,SEARCH)) )
+        jobs.append( pool.apply_async(searchfile, (FILENAME,SKIP,CHUNK,SEARCH,counter,counter_lock)) )
         SKIP=SKIP+CHUNK+1
 
     for job in jobs:
@@ -60,6 +62,6 @@ if __name__ == "__main__":
 
     pool.close()
 
-    print("Search result: %d" % (RESULT))
+    print("Search result: %d" % (counter.value))
 
 
